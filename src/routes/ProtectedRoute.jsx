@@ -8,14 +8,14 @@ export default function ProtectedRoute({ children, requiredRole }) {
   if (loading)
     return (
       <div className="flex items-center justify-center h-screen">
-        <span className="text-gray-600 text-lg">Loading...</span>
+        <div className="w-12 h-12 border-4 border-blue-400 border-dashed rounded-full animate-spin"></div>
       </div>
     );
 
   if (!user) return <Navigate to="/login" replace />;
 
   // Optional role-based access
-  if (requiredRole && user.role !== requiredRole) {
+  if (requiredRole && !requiredRole.includes(user.role)) {
     return (
       <div className="flex items-center justify-center h-screen">
         <span className="text-red-600 text-lg">

@@ -1,73 +1,49 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import axiosClient from "../api/axiosClient";
+import React, { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // optional for async
 
-  // Load user from localStorage on mount
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
-
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
-    }
-
-    setLoading(false);
-  }, []);
-
-  // Login function
   const login = async (email, password) => {
+    setLoading(true);
     try {
-      const res = await axiosClient.post("/auth/login", { email, password });
-      const { token, user } = res.data;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
-
-      return user;
-    } catch (err) {
-      throw err;
+      // Dummy login
+      await new Promise((res) => setTimeout(res, 500));
+      if (email === "admin@test.com" && password === "123456") {
+        setUser({ name: "Admin User", email, role: "Admin" });
+      } else {
+        throw new Error("Invalid credentials");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Signup function
-  const signup = async (name, email, password) => {
+  const signup = async ({ name, email, password }) => {
+    setLoading(true);
     try {
-      const res = await axiosClient.post("/auth/signup", {
-        name,
-        email,
-        password,
-      });
-      const { token, user } = res.data;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
-
-      return user;
-    } catch (err) {
-      throw err;
+      await new Promise((res) => setTimeout(res, 500));
+      setUser({ name, email, role: "User" });
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Logout
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
+  const updateUser = (updatedData) => {
+    setUser((prev) => ({ ...prev, ...updatedData }));
   };
+
+  const logout = () => setUser(null);
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, signup, updateUser, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook to use auth context
 export const useAuth = () => useContext(AuthContext);

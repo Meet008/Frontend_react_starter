@@ -1,49 +1,42 @@
 import React from "react";
 import { useAuth } from "../../context/Authcontext";
-import { useNavigate } from "react-router-dom";
 
 export default function Navbar({ toggleSidebar }) {
-  const { logout, user } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+  const { user, logout } = useAuth();
 
   return (
-    <nav className="w-full h-16 bg-blue-600 text-white flex items-center px-4 shadow z-50">
-      {/* Sidebar toggle button */}
-      <button onClick={toggleSidebar} className="mr-4">
-        <svg
-          className="w-7 h-7 text-white"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
-
-      {/* App title */}
-      <h1 className="text-xl font-semibold">My App</h1>
-
-      {/* Right section */}
-      <div className="ml-auto flex items-center space-x-4">
-        <span className="font-medium">{user?.name}</span>
-
+    <header className="fixed top-0 left-0 w-full md:ml-60 h-16 bg-blue-600 text-white flex items-center justify-between px-4 z-40 shadow">
+      <div className="flex items-center">
+        {/* Mobile Hamburger */}
         <button
-          onClick={handleLogout}
-          className="px-4 py-1 bg-white text-blue-600 rounded-md font-semibold hover:bg-gray-100 transition"
+          className="md:hidden p-2 rounded hover:bg-blue-500 mr-2"
+          onClick={toggleSidebar}
+        >
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+        <span className="font-bold text-lg">Dashboard</span>
+      </div>
+      <div className="flex items-center space-x-4">
+        {user && <span>{user.name}</span>}
+        <button
+          className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
+          onClick={logout}
         >
           Logout
         </button>
       </div>
-    </nav>
+    </header>
   );
 }

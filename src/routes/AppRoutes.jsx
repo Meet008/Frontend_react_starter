@@ -21,7 +21,7 @@ export default function AppRoutes() {
       <Route
         path="/"
         element={
-          // <ProtectedRoute>
+          // <ProtectedRoute requiredRole={["admin", "manager"]}>
           <MainLayout>
             <Dashboard />
           </MainLayout>
@@ -32,11 +32,11 @@ export default function AppRoutes() {
       <Route
         path="/profile"
         element={
-          <ProtectedRoute>
-            <MainLayout>
-              <Profile />
-            </MainLayout>
-          </ProtectedRoute>
+          // <ProtectedRoute>
+          <MainLayout>
+            <Profile />
+          </MainLayout>
+          // </ProtectedRoute>
         }
       />
 
