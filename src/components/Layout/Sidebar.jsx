@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import Model from "../UI/Model";
+import Dialog from "../UI/Dialog";
 export default function Sidebar({ open, toggleSidebar }) {
   const navigate = useNavigate();
   const menuItems = [
     { text: "Dashboard", path: "/" },
     { text: "Profile", path: "/profile" },
   ];
+
+  const [showModal, setShowModal] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
 
   return (
     <>
@@ -17,7 +21,6 @@ export default function Sidebar({ open, toggleSidebar }) {
         }`}
         onClick={toggleSidebar}
       />
-
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full w-60 bg-blue-600 text-white shadow-lg z-30 transform transition-transform duration-300
@@ -60,8 +63,45 @@ export default function Sidebar({ open, toggleSidebar }) {
               {item.text}
             </button>
           ))}
+          <button
+            className="w-full text-left px-4 py-2 hover:bg-blue-500"
+            onClick={() => setShowModal(true)}
+          >
+            Modal
+          </button>
+          <button
+            className="w-full text-left px-4 py-2 hover:bg-blue-500"
+            onClick={() => setShowDialog(true)}
+          >
+            Dialog
+          </button>
         </nav>
       </div>
+      {showModal && (
+        <Model open={true} onClose={() => setShowModal(false)}>
+          <h2 className="text-xl font-bold mb-4">Modal Title</h2>
+          <p>This is a reusable modal using ONLY Tailwind.</p>
+
+          <button
+            onClick={() => setShowModal(false)}
+            className="mt-4 bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+          >
+            Close
+          </button>
+        </Model>
+      )}
+      {showDialog && (
+        <Dialog
+          open={true}
+          title="Delete Account?"
+          message="This action cannot be undone."
+          onConfirm={() => {
+            setShowDialog(false);
+            alert("Account deleted");
+          }}
+          onCancel={() => setShowDialog(false)}
+        />
+      )}
     </>
   );
 }

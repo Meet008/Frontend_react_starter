@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/Authcontext";
 import { useNavigate } from "react-router-dom";
-
+import SocialLogin from "./SocialLogin";
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -72,6 +72,16 @@ export default function Login() {
           >
             Login
           </button>
+          {/* Social Login */}
+          <div className="mt-6">
+            <SocialLogin
+              enableGoogle={true}
+              enableApple={true}
+              enableFacebook={true}
+              onGoogleClick={() => console.log("Google login clicked")}
+              onAppleClick={() => console.log("Apple login clicked")}
+            />
+          </div>
         </form>
 
         <p className="mt-4 text-center text-gray-600">
